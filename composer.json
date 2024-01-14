@@ -1,0 +1,33 @@
+{
+    "name": "adinan-cenci/discography",
+    "description": "Discography",
+    "type": "library",
+    "license": "MIT",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/adinan-cenci/psr-18"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/adinan-cenci/generic-rest-api"
+        }
+    ],
+    "authors": [
+        {
+            "name": "Adinan Cenci",
+            "email": "adinancenci@protonmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "AdinanCenci\\Discography\\": "src/"
+        }
+    },
+    "require": {
+        "adinan-cenci/psr-18": "dev-master",
+        "adinan-cenci/file-cache": "dev-master",
+        "adinan-cenci/generic-rest-api": "dev-master"
+    }
+}
