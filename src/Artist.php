@@ -6,7 +6,7 @@ class Artist
     /**
      * @var string
      *   The source of discography that originated this object.
-     *   See AdinanCenci\Discography\Source\SourceInterface::getId.
+     *   See AdinanCenci\Discography\Source\SourceInterface::getId().
      */
     protected string $source;
 
@@ -18,7 +18,7 @@ class Artist
 
     /**
      * @var string
-     *   The artist's/band's name.
+     *   The name of the artist or band.
      */
     protected string $name;
 
@@ -59,6 +59,11 @@ class Artist
         return !empty($this->{$var});
     }
 
+    /**
+     * Casts down the Artist object into a relational array.
+     *
+     * @return array
+     */
     public function toArray() : array
     {
         $array = [];

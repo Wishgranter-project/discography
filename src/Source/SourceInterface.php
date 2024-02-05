@@ -6,6 +6,9 @@ use AdinanCenci\Discography\Album;
 
 interface SourceInterface 
 {
+    /**
+     * A unique string identifying this source.
+     */
     public function getId() : string;
 
     /**
@@ -24,52 +27,32 @@ interface SourceInterface
     ) : SearchResults;
 
     /**
-     * Search for albuns by the author's name.
+     * Return the albums for a given artist.
+     *
+     * It must exclude compilations, colaborations etc.
+     * Only albuns and singles from the specified artist.
      *
      * @param string $artistName
-     * @param int $page
-     * @param int $itensPerPage
      * 
-     * @return AdinanCenci\Discography\Source\SearchResults
+     * @return Album[]
      */
-    public function searchForAlbumsByArtistName(
-        string $artistName, 
-        int $page = 1, 
-        int $itensPerPage = 20
-    ) : SearchResults;
+    public function getArtistsAlbums(
+        string $artistName
+    ) : array;
 
     /**
-     * @param string $id
-     * 
-     * @return null|Album
-     */
-    public function getAlbumById(string $id) : ?Album;
-
-    /**
+     * Return the specified album.
+     *
+     * The album bust include tracks ( unless it is a single, ofcourse ).
+     *
      * @param string $artistName
-     * @param string $releaseTitle
+     * @param string $title
      * 
      * @return null|Album
      */
-    public function findAlbumByArtistNameAndTitle(
+    public function getAlbum(
         string $artistName,
-        string $releaseTitle
+        string $title
     ) : ?Album;
 
-    /**
-     * Get release either by id or by artist name and title.
-     * 
-     * If it fails to find it by id then tries artist name and title
-     * 
-     * @param null|string $releaseId
-     * @param null|string $artistName
-     * @param null|string $releaseTitle
-     * 
-     * @return null|Album
-     */
-    public function findAlbum(
-        ?string $releaseId = null,
-        ?string $artistName = null,
-        ?string $releaseTitle = null
-    ) : ?Album;
 }

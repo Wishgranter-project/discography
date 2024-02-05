@@ -1,8 +1,6 @@
 <?php 
-use AdinanCenci\Discography\Api\DiscogsApi;
-use AdinanCenci\Discography\Api\LastFmApi;
-use AdinanCenci\Discography\Source\SourceLastFm;
-use AdinanCenci\Discography\Source\SourceDiscogs;
+use AdinanCenci\Discography\Api\ApiMusicBrainz;
+use AdinanCenci\Discography\Source\SourceMusicBrainz;
 use AdinanCenci\Discography\Source\SearchResults;
 use AdinanCenci\Discography\Artist;
 use AdinanCenci\Discography\Release;
@@ -21,29 +19,17 @@ if (!file_exists($cacheDir)) {
 
 //---------------------------------------
 
-$cache        = new Cache($cacheDir);
+$cache          = new Cache($cacheDir);
 
 //---------------------------------------
 
-$lastFmApiKey = file_exists('insert-yout-lastfm-apikey-here.txt')
-                ? file_get_contents('insert-yout-lastfm-apikey-here.txt')
-                : '';
-$lastFmApi    = new LastFmApi($lastFmApiKey, [], $cache);
-$lastFm       = new SourceLastFm($lastFmApi);
-
-//---------------------------------------
-
-$discogsToken = file_exists('insert-yout-discogs-token-here.txt')
-                ? file_get_contents('insert-yout-discogs-token-here.txt')
-                : '';
-$discogsApi   = new DiscogsApi($discogsToken, [], $cache);
-$discogs      = new SourceDiscogs($discogsApi);
+$musicBrainzApi = new ApiMusicBrainz([], $cache);
+$musicBrainz    = new SourceMusicBrainz($musicBrainzApi);
 
 //---------------------------------------
 
 $sources = [
-    $lastFm->getId()  => $lastFm,
-    $discogs->getId() => $discogs
+    $musicBrainz->getId() => $musicBrainz
 ];
 
 function pagination(SearchResults $results) : string

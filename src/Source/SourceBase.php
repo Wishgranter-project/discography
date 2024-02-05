@@ -5,7 +5,7 @@ use AdinanCenci\Discography\Album;
 
 abstract class SourceBase
 {
-    protected string $apiKey;
+    protected string $id = 'base';
 
     /**
      * @inheritDoc
@@ -14,25 +14,4 @@ abstract class SourceBase
     {
         return $this->id;
     }
-
-    /**
-     * @inheritDoc
-     */
-    public function findAlbum(?string $releaseId = null, ?string $artistName = null, ?string $releaseTitle = null) : ?Album
-    {
-        $release = null;
-
-        if (!empty($releaseId)) {
-            $release = $this->getAlbumById($releaseId);
-        }
-
-        if (!$release && !empty($releaseTitle)) {
-            $release = $this->findAlbumByArtistNameAndTitle($artistName, $releaseTitle);
-        }
-
-        return $release
-            ? $release
-            : null;
-    }
-
 }

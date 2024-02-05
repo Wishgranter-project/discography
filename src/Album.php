@@ -23,6 +23,12 @@ class Album
     protected string $title;
 
     /**
+     * @var string
+     *   The artist that released the album.
+     */
+    protected string $artist;
+
+    /**
      * @var int $year
      *   The year it was released.
      */
@@ -38,8 +44,32 @@ class Album
      * @var string[]
      *   The title of the songs in the album.
      */
-    protected array $tracks;
+    protected array $tracks = [];
 
+    /**
+     * @var bool
+     *   Traditional album or single.
+     */
+    protected bool $single = false;
+
+    /**
+     * @param string $source
+     *   The source of discography that originated this object.
+     * @param string $id
+     *   Unique identifier withing the source.
+     * @param string $title
+     *   Title of the album.
+     * @param string $artist
+     *   The artist that released the album.
+     * @param int $year $year
+     *   The year it was released.
+     * @param string $thumbnail
+     *   An absolute URL to a thumbnail picture.
+     * @param string[] $tracks
+     *   The title of the songs in the album.
+     * @var bool $single
+     *   Traditional album or single.
+     */
     public function __construct(
         string $source, 
         string $id, 
@@ -47,7 +77,8 @@ class Album
         string $artist = '', 
         int $year = 0, 
         string $thumbnail = '', 
-        array $tracks = []
+        array $tracks = [],
+        bool $single = false
     ) 
     {
         $this->source    = $source;
@@ -57,6 +88,7 @@ class Album
         $this->year      = (int) $year;
         $this->thumbnail = $thumbnail;
         $this->tracks    = $tracks;
+        $this->single    = $single;
     }
 
     public function __get($var) 
@@ -77,6 +109,8 @@ class Album
 
     /**
      * Casts down the Album object into a relational array.
+     *
+     * @return array
      */
     public function toArray() : array
     {
@@ -110,6 +144,8 @@ class Album
             $array['tracks'] = $this->tracks;
         }
 
+        $array['single'] = $this->single;
+
         return $array;
     }
 
@@ -127,7 +163,8 @@ class Album
             !empty($array['artist'])    ? $array['artist']    : '',
             !empty($array['year'])      ? $array['year']      : 0,
             !empty($array['thumbnail']) ? $array['thumbnail'] : '',
-            !empty($array['tracks'])    ? $array['tracks']    : []
+            !empty($array['tracks'])    ? $array['tracks']    : [],
+            !empty($array['single'])    ? $array['single']    : false
         );
     }
 }

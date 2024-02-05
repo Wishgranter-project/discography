@@ -2,13 +2,12 @@
 include '_include.php';
 
 $sourceId     = empty($_GET['source'])       ? array_keys($sources)[0] : $_GET['source'];
-$releaseId    = empty($_GET['releaseId'])    ? ''                      : $_GET['releaseId'];
 $artistName   = empty($_GET['artistName'])   ? ''                      : $_GET['artistName'];
-$releaseTitle = empty($_GET['releaseTitle']) ? ''                      : $_GET['releaseTitle'];
+$albumTitle   = empty($_GET['albumTitle'])   ? ''                      : $_GET['albumTitle'];
 
 $source       = $sources[$sourceId];
 
-$release = $source->findAlbum($releaseId, $artistName, $releaseTitle);
+$release = $source->getAlbum($artistName, $albumTitle);
 if (!$release) {
     die();
 }
