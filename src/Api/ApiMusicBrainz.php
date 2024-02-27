@@ -1,15 +1,15 @@
-<?php 
-namespace AdinanCenci\Discography\Api;
+<?php
+
+namespace WishgranterProject\Discography\Api;
 
 use AdinanCenci\GenericRestApi\ApiBase;
-
 use Psr\SimpleCache\CacheInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Client\ClientInterface;
 
-class ApiMusicBrainz extends ApiBase 
+class ApiMusicBrainz extends ApiBase
 {
     /**
      * @inheritDoc
@@ -32,10 +32,9 @@ class ApiMusicBrainz extends ApiBase
      */
     public function searchForArtistByName(
         string $artistName,
-        int $offset = 0, 
+        int $offset = 0,
         int $limit = 100
-    ) : ?\stdClass
-    {
+    ): ?\stdClass {
         $query = 'name:"' . $artistName . '"';
 
         $endpoint = 'artist?query=' . $query . '&offset=' . $offset . '&limit=' . $limit;
@@ -47,7 +46,7 @@ class ApiMusicBrainz extends ApiBase
      *
      * @return array
      */
-    public function getAllArtistsReleaseGroups(string $artistName) : array
+    public function getAllArtistsReleaseGroups(string $artistName): array
     {
         $releaseGroups = [];
         $offset = 0;
@@ -59,7 +58,7 @@ class ApiMusicBrainz extends ApiBase
             $groups = $info->{'release-groups'};
             $releaseGroups = array_merge($releaseGroups, $groups);
             $offset += 100;
-        } while(count($releaseGroups) < $count);
+        } while (count($releaseGroups) < $count);
 
         return $releaseGroups;
     }
@@ -74,11 +73,10 @@ class ApiMusicBrainz extends ApiBase
      */
     public function searchReleasesByArtistNameAndTitle(
         string $artistName,
-        string $title, 
-        int $offset = 0, 
+        string $title,
+        int $offset = 0,
         int $limit = 100
-    ) : ?\stdClass
-    {
+    ): ?\stdClass {
         $query = 'artistname:"' . $artistName . '" AND release:"' . $title . '"';
 
         $endpoint = 'release?query=' . $query . '&offset=' . $offset . '&limit=' . $limit;
@@ -90,7 +88,7 @@ class ApiMusicBrainz extends ApiBase
      *
      * @return null|\stdClass
      */
-    public function getReleaseById(string $id) : ?\stdClass
+    public function getReleaseById(string $id): ?\stdClass
     {
         $endpoint = 'release/' . $id . '?inc=recordings';
         return $this->getJson($endpoint);
@@ -104,11 +102,10 @@ class ApiMusicBrainz extends ApiBase
      * @return null|\stdClass
      */
     public function searchReleaseGroupsByArtistName(
-        string $artistName, 
-        int $offset = 0, 
+        string $artistName,
+        int $offset = 0,
         int $limit = 100
-    ) : ?\stdClass
-    {
+    ): ?\stdClass {
         $query = 'artistname:"' . $artistName . '" AND (primarytype:"Album" OR primarytype:"Single") AND -secondarytype:"Compilation" AND -secondarytype:"Live"';
 
         $endpoint = 'release-group?query=' . $query . '&offset=' . $offset . '&limit=' . $limit;
@@ -118,7 +115,7 @@ class ApiMusicBrainz extends ApiBase
     /**
      * @inheritDoc
      */
-    protected function createRequest(string $endPoint) : RequestInterface
+    protected function createRequest(string $endPoint): RequestInterface
     {
         $request = parent::createRequest($endPoint);
         $request = $request->withHeader('User-Agent', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36');
@@ -130,7 +127,7 @@ class ApiMusicBrainz extends ApiBase
     /**
      * @inheritDoc
      */
-    protected function generateExceptionMessage(ResponseInterface $response) : string
+    protected function generateExceptionMessage(ResponseInterface $response): string
     {
         $body = (string) $response->getBody();
 

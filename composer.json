@@ -1,5 +1,5 @@
 {
-    "name": "adinan-cenci/discography",
+    "name": "wishgranter-project/discography",
     "description": "Discography",
     "type": "library",
     "license": "MIT",
@@ -22,7 +22,7 @@
     "minimum-stability": "dev",
     "autoload": {
         "psr-4": {
-            "AdinanCenci\\Discography\\": "src/"
+            "WishgranterProject\\Discography\\": "src/"
         }
     },
     "require": {

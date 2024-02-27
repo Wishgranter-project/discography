@@ -1,10 +1,11 @@
-<?php 
-namespace AdinanCenci\Discography\Source;
+<?php
+
+namespace WishgranterProject\Discography\Source;
 
 /**
  * Represents paged portion of search results.
  */
-class SearchResults 
+class SearchResults
 {
     /**
      * @var array
@@ -63,8 +64,7 @@ class SearchResults
         int $pages,
         int $itensPerPage,
         int $total
-    ) 
-    {
+    ) {
         $this->items        = $items;
         $this->count        = $count;
         $this->page         = $page;
@@ -73,12 +73,12 @@ class SearchResults
         $this->total        = $total;
     }
 
-    public function __get($var) 
+    public function __get($var)
     {
         return $this->{$var};
     }
 
-    public static function empty() : SearchResults
+    public static function empty(): SearchResults
     {
         return new self([], 0, 0, 0, 0, 0);
     }

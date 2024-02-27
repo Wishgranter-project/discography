@@ -1,7 +1,8 @@
-<?php 
-namespace AdinanCenci\Discography\Source;
+<?php
 
-use AdinanCenci\Discography\Album;
+namespace WishgranterProject\Discography\Source;
+
+use WishgranterProject\Discography\Album;
 
 abstract class SourceBase
 {
@@ -10,7 +11,7 @@ abstract class SourceBase
     /**
      * @inheritDoc
      */
-    public function getId() : string 
+    public function getId(): string
     {
         return $this->id;
     }

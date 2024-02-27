@@ -1,9 +1,10 @@
-<?php 
-use AdinanCenci\Discography\Api\ApiMusicBrainz;
-use AdinanCenci\Discography\Source\SourceMusicBrainz;
-use AdinanCenci\Discography\Source\SearchResults;
-use AdinanCenci\Discography\Artist;
-use AdinanCenci\Discography\Release;
+<?php
+
+use WishgranterProject\Discography\Api\ApiMusicBrainz;
+use WishgranterProject\Discography\Source\SourceMusicBrainz;
+use WishgranterProject\Discography\Source\SearchResults;
+use WishgranterProject\Discography\Artist;
+use WishgranterProject\Discography\Release;
 use AdinanCenci\FileCache\Cache;
 
 //---------------------------------------
@@ -34,7 +35,7 @@ $sources = [
 
 function pagination(SearchResults $results) : string
 {
-    $string = 
+    $string =
     '<div class="pagination">' .
         "Displaying {$results->count} results of {$results->total}, page {$results->page} of {$results->pages}
         <ul>";
@@ -52,11 +53,11 @@ function pagination(SearchResults $results) : string
     $end   = $end > $results->pages ? $results->pages : $end;
 
     for ($p = $start; $p < $end; $p++) {
-        $string .= 
+        $string .=
         '<a href="?' . $query . '&page=' . $p . '" class="' . ( $results->page == $p ? 'current' : '')  . '">' . $p . '</a>';
     }
 
-    $string .= 
+    $string .=
         '</ul>
     </div>';
 

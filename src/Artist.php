@@ -1,12 +1,13 @@
-<?php 
-namespace AdinanCenci\Discography;
+<?php
 
-class Artist 
+namespace WishgranterProject\Discography;
+
+class Artist
 {
     /**
      * @var string
      *   The source of discography that originated this object.
-     *   See AdinanCenci\Discography\Source\SourceInterface::getId().
+     *   See WishgranterProject\Discography\Source\SourceInterface::getId().
      */
     protected string $source;
 
@@ -35,26 +36,25 @@ class Artist
      * @param string $thumbnail
      */
     public function __construct(
-        string $source, 
-        string $id, 
-        string $name, 
+        string $source,
+        string $id,
+        string $name,
         string $thumbnail = ''
-    ) 
-    {
+    ) {
         $this->source    = $source;
         $this->id        = $id;
         $this->name      = $name;
         $this->thumbnail = $thumbnail;
     }
 
-    public function __get($var) 
+    public function __get($var)
     {
         return !empty($this->{$var})
             ? $this->{$var}
             : null;
     }
 
-    public function __isset($var) 
+    public function __isset($var)
     {
         return !empty($this->{$var});
     }
@@ -64,7 +64,7 @@ class Artist
      *
      * @return array
      */
-    public function toArray() : array
+    public function toArray(): array
     {
         $array = [];
 
@@ -90,9 +90,9 @@ class Artist
     /**
      * @param string[] $array
      *
-     * @return AdinanCenci\Discography\Artist
+     * @return WishgranterProject\Discography\Artist
      */
-    public static function createFromArray(array $array) : Artist
+    public static function createFromArray(array $array): Artist
     {
         return new self(
             !empty($array['source'])    ? $array['source']    : '',

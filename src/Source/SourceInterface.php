@@ -1,15 +1,16 @@
-<?php 
-namespace AdinanCenci\Discography\Source;
+<?php
 
-use AdinanCenci\Discography\Artist;
-use AdinanCenci\Discography\Album;
+namespace WishgranterProject\Discography\Source;
 
-interface SourceInterface 
+use WishgranterProject\Discography\Artist;
+use WishgranterProject\Discography\Album;
+
+interface SourceInterface
 {
     /**
      * A unique string identifying this source.
      */
-    public function getId() : string;
+    public function getId(): string;
 
     /**
      * Search for artists by their name.
@@ -17,14 +18,14 @@ interface SourceInterface
      * @param string $artistName
      * @param int $page
      * @param int $itensPerPage
-     * 
-     * @return AdinanCenci\Discography\Source\SearchResults
+     *
+     * @return WishgranterProject\Discography\Source\SearchResults
      */
     public function searchForArtistByName(
-        string $artistName, 
-        int $page = 1, 
+        string $artistName,
+        int $page = 1,
         int $itensPerPage = 20
-    ) : SearchResults;
+    ): SearchResults;
 
     /**
      * Return the albums for a given artist.
@@ -33,12 +34,12 @@ interface SourceInterface
      * Only albuns and singles from the specified artist.
      *
      * @param string $artistName
-     * 
+     *
      * @return Album[]
      */
     public function getArtistsAlbums(
         string $artistName
-    ) : array;
+    ): array;
 
     /**
      * Return the specified album.
@@ -47,12 +48,11 @@ interface SourceInterface
      *
      * @param string $artistName
      * @param string $title
-     * 
+     *
      * @return null|Album
      */
     public function getAlbum(
         string $artistName,
         string $title
-    ) : ?Album;
-
+    ): ?Album;
 }

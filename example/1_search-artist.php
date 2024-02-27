@@ -30,9 +30,9 @@ require '_header.php';
     <input type="submit" value="Search for artist" />
 </form>
 <div class="grid artists">
-    <?php 
+    <?php
     foreach ($results->items as $artist) {
-        echo 
+        echo
         "<a href=\"2_search-albums.php?source={$artist->source}&artistName={$artist->name}\" class=\"cell artist\" title=\"{$artist->id}\">
             <span class=\"thumbnail\" style=\"background-image: url({$artist->thumbnail})\"></span>
             <h3>{$artist->name}</h3>

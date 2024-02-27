@@ -1,17 +1,18 @@
-<?php 
-namespace AdinanCenci\Discography\Source;
+<?php
 
-use AdinanCenci\Discography\Api\ApiMusicBrainz;
-use AdinanCenci\Discography\Artist;
-use AdinanCenci\Discography\Album;
+namespace WishgranterProject\Discography\Source;
 
-class SourceMusicBrainz extends SourceBase implements SourceInterface 
+use WishgranterProject\Discography\Api\ApiMusicBrainz;
+use WishgranterProject\Discography\Artist;
+use WishgranterProject\Discography\Album;
+
+class SourceMusicBrainz extends SourceBase implements SourceInterface
 {
     protected ApiMusicBrainz $api;
 
     protected string $id = 'music_brainz';
 
-    public function __construct(ApiMusicBrainz $api) 
+    public function __construct(ApiMusicBrainz $api)
     {
         $this->api = $api;
     }
@@ -20,11 +21,10 @@ class SourceMusicBrainz extends SourceBase implements SourceInterface
      * @inheritDoc
      */
     public function searchForArtistByName(
-        string $artistName, 
-        int $page = 1, 
+        string $artistName,
+        int $page = 1,
         int $itensPerPage = 20
-    ) : SearchResults
-    {
+    ): SearchResults {
 
         $limit = $itensPerPage;
         $offset = ($page - 1) * $itensPerPage;
@@ -39,7 +39,7 @@ class SourceMusicBrainz extends SourceBase implements SourceInterface
             $items[] = Artist::createFromArray([
                 'source'    => $this->getId(),
                 'id'        => $a->id,
-                'name'      => $a->name, 
+                'name'      => $a->name,
                 'thumbnail' => null,
             ]);
         }
@@ -59,8 +59,7 @@ class SourceMusicBrainz extends SourceBase implements SourceInterface
      */
     public function getArtistsAlbums(
         string $artistName
-    ) : array
-    {
+    ): array {
         $albums = [];
         $releaseGroups = $this->api->getAllArtistsReleaseGroups($artistName);
         $titles = [];
@@ -77,9 +76,9 @@ class SourceMusicBrainz extends SourceBase implements SourceInterface
             $albums[] = Album::createFromArray([
                 'source'    => $this->getId(),
                 'id'        => $g->id,
-                'title'     => $g->title, 
+                'title'     => $g->title,
                 'artist'    => $g?->{'artist-credit'}[0]?->name ?? '',
-                'thumbnail' => "http://coverartarchive.org/release-group/{$g->id}/front-250.jpg", 
+                'thumbnail' => "http://coverartarchive.org/release-group/{$g->id}/front-250.jpg",
                 'year'      => $g->{'first-release-data'} ?? 0,
                 'single'    => $g->{'primary-type'} == 'Single'
             ]);
@@ -87,8 +86,7 @@ class SourceMusicBrainz extends SourceBase implements SourceInterface
             $titles[] = $g->title;
         }
 
-        usort($albums, function($a, $b) 
-        {
+        usort($albums, function ($a, $b) {
             if ($a->single == $b->single) {
                 return 0;
             }
@@ -105,10 +103,9 @@ class SourceMusicBrainz extends SourceBase implements SourceInterface
      * @inheritDoc
      */
     public function getAlbum(
-        string $artistName, 
+        string $artistName,
         string $title
-    ) : ?Album
-    {
+    ): ?Album {
         $releases = $this->api->searchReleasesByArtistNameAndTitle($artistName, $title, 0, 1);
 
         if (empty($releases->releases)) {
@@ -135,10 +132,9 @@ class SourceMusicBrainz extends SourceBase implements SourceInterface
         ]);
     }
 
-    protected function getYear(string $date) : int
+    protected function getYear(string $date): int
     {
         $unixTimeStamp = strtotime($date);
         return (int) date('Y');
     }
-    
 }

@@ -1,4 +1,5 @@
-<?php 
+<?php
+
 include '_include.php';
 
 $sourceId     = empty($_GET['source'])     ? array_keys($sources)[0] : $_GET['source'];
@@ -18,13 +19,13 @@ require '_header.php';
     <?php
     foreach ($albuns as $album) {
         if ($album->single) {
-            echo 
+            echo
             "<div class=\"cell release\" title=\"{$album->id}\">
                 <span class=\"thumbnail\" style=\"background-image: url({$album->thumbnail})\"></span>
                 <h3>{$album->title}</h3>
             </div>";
         } else {
-            echo 
+            echo
             "<a href=\"3_list-tracks.php?source={$album->source}&artistName=" . ( $album->artist ?: $artistName ) . "&albumTitle={$album->title}\" class=\"cell release\" title=\"{$album->id}\">
                 <span class=\"thumbnail\" style=\"background-image: url({$album->thumbnail})\"></span>
                 <h3>{$album->title}</h3>
@@ -33,6 +34,6 @@ require '_header.php';
     }
     ?>
 </div>
-<?php 
+<?php
 
 require '_footer.php';

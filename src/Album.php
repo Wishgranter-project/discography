@@ -1,12 +1,13 @@
-<?php 
-namespace AdinanCenci\Discography;
+<?php
 
-class Album 
+namespace WishgranterProject\Discography;
+
+class Album
 {
     /**
      * @var string
      *   The source of discography that originated this object.
-     *   See AdinanCenci\Discography\Source\SourceInterface::getId.
+     *   See WishgranterProject\Discography\Source\SourceInterface::getId.
      */
     protected string $source;
 
@@ -71,16 +72,15 @@ class Album
      *   Traditional album or single.
      */
     public function __construct(
-        string $source, 
-        string $id, 
-        string $title, 
-        string $artist = '', 
-        int $year = 0, 
-        string $thumbnail = '', 
+        string $source,
+        string $id,
+        string $title,
+        string $artist = '',
+        int $year = 0,
+        string $thumbnail = '',
         array $tracks = [],
         bool $single = false
-    ) 
-    {
+    ) {
         $this->source    = $source;
         $this->id        = $id;
         $this->title     = $title;
@@ -91,7 +91,7 @@ class Album
         $this->single    = $single;
     }
 
-    public function __get($var) 
+    public function __get($var)
     {
         if ($var == 'tracks') {
             return $this->tracks;
@@ -102,7 +102,7 @@ class Album
             : null;
     }
 
-    public function __isset($var) 
+    public function __isset($var)
     {
         return !empty($this->{$var});
     }
@@ -112,7 +112,7 @@ class Album
      *
      * @return array
      */
-    public function toArray() : array
+    public function toArray(): array
     {
         $array = [];
 
@@ -152,9 +152,9 @@ class Album
     /**
      * @param string[] $array
      *
-     * @return AdinanCenci\Discography\Album
+     * @return WishgranterProject\Discography\Album
      */
-    public static function createFromArray(array $array) : Album
+    public static function createFromArray(array $array): Album
     {
         return new self(
             !empty($array['source'])    ? $array['source']    : '',
