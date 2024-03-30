@@ -167,4 +167,22 @@ class Album
             !empty($array['single'])    ? $array['single']    : false
         );
     }
+
+    public static function sortAlbums(array &$albums): void
+    {
+        usort($albums, function ($a, $b) {
+            $aFirst = -1;
+            $bFirst = 1;
+
+            if ($a->single && !$b->single) {
+                return $bFirst;
+            } elseif (!$a->single && $b->single) {
+                return $aFirst;
+            }
+
+            return strcmp($a->title, $b->title) <= -1
+                ? $aFirst
+                : $bFirst;
+        });
+    }
 }

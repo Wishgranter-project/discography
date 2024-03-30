@@ -13,8 +13,16 @@ require '_header.php';
 ?>
 
 <h1>
-    <?php echo "$sourceId: albums of $artistName"; ?>
+    <?php echo "Albums of $artistName"; ?>
 </h1>
+<h2>
+    <?php echo "$sourceId | " . switchSourceLinks($_GET['source'] ?? ''); ?>
+</h2>
+<form>
+    <input type="hidden" name="source" value="<?php echo $sourceId;?>" />
+    <input type="text" name="artistName" placeholder="artist" value="<?php echo $artistName;?>" />
+    <input type="submit" value="Search for artist" />
+</form>
 <div class="grid albums">
     <?php
     foreach ($albuns as $album) {

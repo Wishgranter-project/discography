@@ -1,8 +1,9 @@
 <?php
 
-namespace WishgranterProject\Discography\Source;
+namespace WishgranterProject\Discography\MusicBrainz;
 
-use WishgranterProject\Discography\Api\ApiMusicBrainz;
+use WishgranterProject\Discography\Source\SourceInterface;
+use WishgranterProject\Discography\Source\SourceBase;
 use WishgranterProject\Discography\Artist;
 use WishgranterProject\Discography\Album;
 
@@ -20,23 +21,14 @@ class SourceMusicBrainz extends SourceBase implements SourceInterface
     /**
      * @inheritDoc
      */
-    public function searchForArtistByName(
-        string $artistName,
-        int $page = 1,
-        int $itensPerPage = 20
-    ): SearchResults {
+    public function searchForArtist(string $artistName): array
+    {
+        $info = $this->api->searchForArtistByName($artistName, 0, 25);
 
-        $limit = $itensPerPage;
-        $offset = ($page - 1) * $itensPerPage;
-        $info = $this->api->searchForArtistByName($artistName, $offset, $limit);
-
-        $total = $info->count;
-        $pages = round($info->count / $itensPerPage);
-
-        $items = [];
+        $artists = [];
 
         foreach ($info->artists as $a) {
-            $items[] = Artist::createFromArray([
+            $artists[] = Artist::createFromArray([
                 'source'    => $this->getId(),
                 'id'        => $a->id,
                 'name'      => $a->name,
@@ -44,22 +36,14 @@ class SourceMusicBrainz extends SourceBase implements SourceInterface
             ]);
         }
 
-        return new SearchResults(
-            $items,
-            count($items),
-            $page,
-            $pages,
-            $itensPerPage,
-            $total
-        );
+        return $artists;
     }
 
     /**
      * @inheritDoc
      */
-    public function getArtistsAlbums(
-        string $artistName
-    ): array {
+    public function getArtistsAlbums(string $artistName): array
+    {
         $albums = [];
         $releaseGroups = $this->api->getAllArtistsReleaseGroups($artistName);
         $titles = [];
@@ -86,15 +70,7 @@ class SourceMusicBrainz extends SourceBase implements SourceInterface
             $titles[] = $g->title;
         }
 
-        usort($albums, function ($a, $b) {
-            if ($a->single == $b->single) {
-                return 0;
-            }
-
-            return $a->single
-                ? 1
-                : -1;
-        });
+        Album::sortAlbums($albums);
 
         return $albums;
     }
@@ -102,10 +78,8 @@ class SourceMusicBrainz extends SourceBase implements SourceInterface
     /**
      * @inheritDoc
      */
-    public function getAlbum(
-        string $artistName,
-        string $title
-    ): ?Album {
+    public function getAlbum(string $artistName, string $title): ?Album
+    {
         $releases = $this->api->searchReleasesByArtistNameAndTitle($artistName, $title, 0, 1);
 
         if (empty($releases->releases)) {

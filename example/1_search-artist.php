@@ -6,13 +6,11 @@ include '_include.php';
 
 $sourceId     = empty($_GET['source'])     ? array_keys($sources)[0] : $_GET['source'];
 $artistName   = empty($_GET['artistName']) ? 'The Andrew Sisters'    : $_GET['artistName'];
-$page         = empty($_GET['page'])       ? 1                       : $_GET['page'];
-$itensPerPage = 20;
 
 $source       = $sources[$sourceId];
 
 try {
-    $results  = $source->searchForArtistByName($artistName, $page, $itensPerPage);
+    $results  = $source->searchForArtist($artistName);
 } catch (UserError $e) {
     echo $e->getMessage();
     die();
@@ -22,8 +20,11 @@ require '_header.php';
 ?>
 
 <h1>
-    <?php echo "$sourceId: search for artists"; ?>
+    <?php echo "Artists"; ?>
 </h1>
+<h2>
+    <?php echo "$sourceId | " . switchSourceLinks($_GET['source'] ?? ''); ?>
+</h2>
 <form>
     <input type="hidden" name="source" value="<?php echo $sourceId;?>" />
     <input type="text" name="artistName" placeholder="artist" value="<?php echo $artistName;?>" />
@@ -31,7 +32,7 @@ require '_header.php';
 </form>
 <div class="grid artists">
     <?php
-    foreach ($results->items as $artist) {
+    foreach ($results as $artist) {
         echo
         "<a href=\"2_search-albums.php?source={$artist->source}&artistName={$artist->name}\" class=\"cell artist\" title=\"{$artist->id}\">
             <span class=\"thumbnail\" style=\"background-image: url({$artist->thumbnail})\"></span>
@@ -42,5 +43,4 @@ require '_header.php';
 </div>
 
 <?php
-echo pagination($results);
 require '_footer.php';

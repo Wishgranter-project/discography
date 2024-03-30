@@ -31,9 +31,14 @@ class Artist
 
     /**
      * @param string $source
+     *   The source of discography that originated this object.
+     *   See WishgranterProject\Discography\Source\SourceInterface::getId().
      * @param string $id
+     *   Unique identifier withing the source.
      * @param string $name
+     *   The name of the artist or band.
      * @param string $thumbnail
+     *   An URL to a thumbnail picture.
      */
     public function __construct(
         string $source,

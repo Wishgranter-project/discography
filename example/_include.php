@@ -1,8 +1,9 @@
 <?php
 
-use WishgranterProject\Discography\Api\ApiMusicBrainz;
-use WishgranterProject\Discography\Source\SourceMusicBrainz;
-use WishgranterProject\Discography\Source\SearchResults;
+use WishgranterProject\Discography\Discogs\ApiDiscogs;
+use WishgranterProject\Discography\Discogs\SourceDiscogs;
+use WishgranterProject\Discography\MusicBrainz\ApiMusicBrainz;
+use WishgranterProject\Discography\MusicBrainz\SourceMusicBrainz;
 use WishgranterProject\Discography\Artist;
 use WishgranterProject\Discography\Release;
 use AdinanCenci\FileCache\Cache;
@@ -24,45 +25,40 @@ $cache          = new Cache($cacheDir);
 
 //---------------------------------------
 
+$discogsApi     = new ApiDiscogs('your-token-goes-here', [], $cache);
+$discogs        = new SourceDiscogs($discogsApi);
+
+//---------------------------------------
+
 $musicBrainzApi = new ApiMusicBrainz([], $cache);
 $musicBrainz    = new SourceMusicBrainz($musicBrainzApi);
 
 //---------------------------------------
 
 $sources = [
-    $musicBrainz->getId() => $musicBrainz
+    $discogs->getId()     => $discogs,
+    $musicBrainz->getId() => $musicBrainz,
 ];
 
-function pagination(SearchResults $results) : string
+function switchSourceLinks(string $notIt): string
 {
-    $string =
-    '<div class="pagination">' .
-        "Displaying {$results->count} results of {$results->total}, page {$results->page} of {$results->pages}
-        <ul>";
-
-    $query = $_GET;
-    unset($query['page']);
-    $query = http_build_query($query);
-    $max = 12;
-
-    $max = $results->pages < $max ? $results->pages : $max;
-
-    $start = $results->page - round($max / 2);
-    $start = $start <= 0 ? 1 : $start;
-    $end   = $start + $max;
-    $end   = $end > $results->pages ? $results->pages : $end;
-
-    for ($p = $start; $p < $end; $p++) {
-        $string .=
-        '<a href="?' . $query . '&page=' . $p . '" class="' . ( $results->page == $p ? 'current' : '')  . '">' . $p . '</a>';
+    $parts = [];
+    foreach ($GLOBALS['sources'] as $id => $source) {
+        if ($id == $notIt) {
+            continue;
+        }
+        $parts[] = switchSourceLink($id);
     }
 
-    $string .=
-        '</ul>
-    </div>';
-
-    return $string;
+    return implode(' / ', $parts);
 }
 
+function switchSourceLink(string $sourceId)
+{
+    $vars = $_GET;
+    $vars['source'] = $sourceId;
+    $query = http_build_query($vars);
 
-echo '<link href="stylesheet.css" rel="stylesheet">';
+    return 
+    '<a href="?' . $query . '" title="see results from ' . $sourceId . ' ">' . $sourceId . '</a>';
+}

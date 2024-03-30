@@ -1,6 +1,6 @@
 <?php
 
-namespace WishgranterProject\Discography\Api;
+namespace WishgranterProject\Discography\MusicBrainz;
 
 use AdinanCenci\GenericRestApi\ApiBase;
 use Psr\SimpleCache\CacheInterface;
