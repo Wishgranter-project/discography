@@ -75,6 +75,16 @@ class ApiDiscogs extends ApiBase
         ]);
     }
 
+    public function searchReleasesByArtistsId(string $artistId, int $page = 1, int $itensPerPage = 100)
+    {
+        return $this->search([
+            'page'     => $page,
+            'per_page' => $itensPerPage,
+            'type'     => 'release',
+            'query'    => $artistId,
+        ]);
+    }
+
     public function searchReleasesByTitleAndArtistsName(string $artistName, string $title, int $page = 1, int $itensPerPage = 100)
     {
         $artistName = strtolower($artistName);
@@ -98,7 +108,7 @@ class ApiDiscogs extends ApiBase
 
     public function getReleasesByArtistId(string $artistId, int $page = 1, int $itensPerPage = 100)
     {
-        return $this->getJson('artists/' . $artistId . '/releases?page=' . $page . '&per_page=' . $itensPerPage . '&type=release');
+        return $this->getJson('artists/' . $artistId . '/releases?page=' . $page . '&per_page=' . $itensPerPage);
     }
 
     public function search(array $data)

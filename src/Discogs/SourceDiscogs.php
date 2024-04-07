@@ -114,6 +114,9 @@ class SourceDiscogs extends SourceBase implements SourceInterface
         return $results[0]->id;
     }
 
+    /**
+     * @todo Will need to abstract this into classes.
+     */
     protected function getArtistsAlbumsById(string $artistId, string $artistName): array
     {
         $albums             = [];
@@ -122,11 +125,20 @@ class SourceDiscogs extends SourceBase implements SourceInterface
         $page               = 1;
         $undesirableFormats = $this->getUndesirableFormats();
         $undesirableRoles   = $this->getUndesirableRoles();
+        $pageLimit          = 2;
+
+        $type = 'get';
 
         do {
-            $info = $this->api->getReleasesByArtistId($artistId, $page);
+            $info = $type == 'search'
+                ? $this->api->searchReleasesByArtistsId($artistId, $page)
+                : $this->api->getReleasesByArtistId($artistId, $page);
 
-            foreach ($info->releases as $r) {
+            $releases = isset($info->releases)
+                ? $info->releases
+                : $info->results;
+
+            foreach ($releases as $r) {
                 $masterId = isset($r->master_id)
                     ? $r->master_id
                     : null;
@@ -135,11 +147,18 @@ class SourceDiscogs extends SourceBase implements SourceInterface
                     ? $r->artist
                     : '';
 
-                $formats = isset($r->format)
-                    ? preg_split('/, ?/', $r->format)
-                    : [];
+                $formats = [];
+                if (isset($r->format)) {
+                    $formats = is_string($r->format)
+                        ? preg_split('/, ?/', $r->format)
+                        : $r->format;
+                }
 
-                $title = $this->getAlbumTitle($r->title);
+                if ($type == 'search' && !substr_count($r->title, $artistName)) {
+                    continue;
+                }
+
+                $albumTitle = $this->getAlbumTitle($r->title);
 
                 //-------------
 
@@ -147,16 +166,16 @@ class SourceDiscogs extends SourceBase implements SourceInterface
                     continue;
                 }
 
-                if (substr_count(strtolower($title), 'remastered')) {
+                if ($this->undesirableTitleNuggets($albumTitle)) {
                     continue;
                 }
 
                 // Avoid duplicated results.
-                if (in_array($title, $titles)) {
+                if (in_array($albumTitle, $titles)) {
                     continue;
                 }
 
-                $titles[] = $title;
+                $titles[] = $albumTitle;
 
                 if ($formats && array_intersect($undesirableFormats, $formats)) {
                     continue;
@@ -176,7 +195,7 @@ class SourceDiscogs extends SourceBase implements SourceInterface
                 $albums[] = Album::createFromArray([
                     'source'    => $this->getId(),
                     'id'        => $r->id,
-                    'title'     => $title,
+                    'title'     => $albumTitle,
                     'artist'    => $artistName,
                     'year'      => isset($r->year) ? $r->year : null,
                     'thumbnail' => $r->thumb,
@@ -187,7 +206,8 @@ class SourceDiscogs extends SourceBase implements SourceInterface
             $page++;
         } while (
             $info->pagination &&
-            $info->pagination->page < $info->pagination->pages
+            $info->pagination->page < $info->pagination->pages &&
+            $info->pagination->page < $pageLimit
         );
 
         // Remove duplicated results.
@@ -208,6 +228,38 @@ class SourceDiscogs extends SourceBase implements SourceInterface
         Album::sortAlbums($albums);
 
         return $albums;
+    }
+
+    /**
+     * Checks for undesirable words ( remastered, live, etc).
+     *
+     * @param string $title
+     *
+     * @return bool
+     */
+    protected function undesirableTitleNuggets(string $albumTitle): bool
+    {
+        $albumTitle = strtolower($albumTitle);
+
+        if (substr_count($albumTitle, 'remastered')) {
+            return true;
+        }
+
+        if (substr_count($albumTitle, '(live)')) {
+            return true;
+        }
+
+        if (
+            substr_count($albumTitle, 'live') &&
+            (
+                !preg_match('/lives$/', $albumTitle) &&
+                !preg_match('/alive$/', $albumTitle)
+            )
+        ) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -232,8 +284,8 @@ class SourceDiscogs extends SourceBase implements SourceInterface
     protected function getUndesirableFormats(): array
     {
         return [
-            'Limited Edition',
-            'Reissue',
+            //'Limited Edition', // this excluded really cool albums such as Foundations of Burden.
+            // 'Reissue', // this excluded pallbearer's demo album.
             'Remastered',
             'Unofficial Release',
             'Compilation',
