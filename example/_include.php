@@ -25,7 +25,7 @@ $cache          = new Cache($cacheDir);
 
 //---------------------------------------
 
-$discogsApi     = new ApiDiscogs('your-token-goes-here', [], $cache);
+$discogsApi     = new ApiDiscogs('insert-your-token-here', [], $cache);
 $discogs        = new SourceDiscogs($discogsApi);
 
 //---------------------------------------
