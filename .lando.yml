@@ -1,0 +1,19 @@
+name: discography
+recipe: lamp
+config:
+  php: '8.1'
+  webroot: ./examples/
+  composer_version: '2.5.1'
+  xdebug: true
+  config:
+    server: ./.lando/
+    php: ./.lando/php/php.ini
+services:
+  database: disabled
+
+  # Unset the XDEBUG_MODE environment variable, this way the xdebug.mode
+  # setting in .lando/php/php.ini will not be ignored.
+  appserver:
+    overrides:
+      environment:
+        XDEBUG_MODE:
