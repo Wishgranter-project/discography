@@ -1,4 +1,4 @@
 vendor/
-example/cache/
-example/insert-yout-lastfm-apikey-here.txt
-example/insert-yout-discogs-token-here.txt
+examples/cache/
+examples/insert-your-lastfm-apikey-here.txt
+examples/insert-your-discogs-token-here.txt
