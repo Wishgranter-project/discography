@@ -6,7 +6,7 @@ class Artist
 {
     /**
      * @var string
-     *   The source of discography that originated this object.
+     *   The source that originated this object.
      *   See WishgranterProject\Discography\Source\SourceInterface::getId().
      */
     protected string $source;
@@ -31,7 +31,7 @@ class Artist
 
     /**
      * @param string $source
-     *   The source of discography that originated this object.
+     *   The source that originated this object.
      *   See WishgranterProject\Discography\Source\SourceInterface::getId().
      * @param string $id
      *   Unique identifier withing the source.

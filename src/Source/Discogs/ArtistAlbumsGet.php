@@ -1,12 +1,16 @@
 <?php
 
-namespace WishgranterProject\Discography\Discogs;
+namespace WishgranterProject\Discography\Source\Discogs;
 
+use WishgranterProject\Discography\Api\ApiDiscogs;
 use WishgranterProject\Discography\Source\SourceInterface;
 use WishgranterProject\Discography\Source\SourceBase;
 use WishgranterProject\Discography\Artist;
 use WishgranterProject\Discography\Album;
 
+/**
+ * Returns albuns by artist id.
+ */
 class ArtistAlbumsGet
 {
     protected ApiDiscogs $api;
@@ -90,8 +94,12 @@ class ArtistAlbumsGet
         return $releases;
     }
 
+    /**
+     * 
+     */
     protected function filterOutByArtistName(\stdClass $r): bool
     {
+        // No compilations.
         if ($r->artist == 'Various' && $this->artistName == 'Various') {
             return true;
         } elseif ($r->artist == 'Various') {
@@ -105,20 +113,23 @@ class ArtistAlbumsGet
     {
         $albumTitle = strtolower($r->albumTitle);
 
+        // No, thank you.
         if (substr_count($albumTitle, 'remastered')) {
             return false;
         }
 
+        // Absolutely not.
         if (substr_count($albumTitle, '(live)')) {
             return false;
         }
 
-        $live  = substr_count($albumTitle, 'live');
+        $live_word_count  = substr_count($albumTitle, 'live');
 
-        if (!$live) {
+        if (!$live_word_count) {
             return true;
         }
 
+        // Exceptions.
         $lives = preg_match('/lives$/', $albumTitle);
         $alive = preg_match('/alive$/', $albumTitle);
 
@@ -151,6 +162,7 @@ class ArtistAlbumsGet
             return true;
         }
 
+        // No compilations, we want the artist's work.
         $undesirableRoles = [
             'TrackAppearance',
             'UnofficialRelease',
@@ -216,7 +228,7 @@ class ArtistAlbumsGet
     }
 
     /**
-     * Removes the artist's name prefix from the album's title.
+     * Discogs prefixes the album's title with the artist's name, let's remove it.
      *
      * @param string $albumTitle The album title.
      *

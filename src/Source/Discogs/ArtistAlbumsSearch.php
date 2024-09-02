@@ -1,6 +1,6 @@
 <?php
 
-namespace WishgranterProject\Discography\Discogs;
+namespace WishgranterProject\Discography\Source\Discogs;
 
 class ArtistAlbumsSearch extends ArtistAlbumsGet
 {

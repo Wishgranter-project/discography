@@ -1,6 +1,6 @@
 <?php
 
-namespace WishgranterProject\Discography\Discogs;
+namespace WishgranterProject\Discography\Api;
 
 use AdinanCenci\GenericRestApi\ApiBase;
 use Psr\SimpleCache\CacheInterface;

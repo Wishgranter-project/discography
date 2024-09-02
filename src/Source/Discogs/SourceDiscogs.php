@@ -1,7 +1,8 @@
 <?php
 
-namespace WishgranterProject\Discography\Discogs;
+namespace WishgranterProject\Discography\Source\Discogs;
 
+use WishgranterProject\Discography\Api\ApiDiscogs;
 use WishgranterProject\Discography\Source\SourceInterface;
 use WishgranterProject\Discography\Source\SourceBase;
 use WishgranterProject\Discography\Artist;

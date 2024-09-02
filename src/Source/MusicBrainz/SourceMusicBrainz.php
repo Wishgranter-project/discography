@@ -1,7 +1,8 @@
 <?php
 
-namespace WishgranterProject\Discography\MusicBrainz;
+namespace WishgranterProject\Discography\Source\MusicBrainz;
 
+use WishgranterProject\Discography\Api\ApiMusicBrainz;
 use WishgranterProject\Discography\Source\SourceInterface;
 use WishgranterProject\Discography\Source\SourceBase;
 use WishgranterProject\Discography\Artist;

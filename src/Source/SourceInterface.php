@@ -14,7 +14,7 @@ interface SourceInterface
     public function getId(): string;
 
     /**
-     * Search for artists by their name.
+     * Search for artists/bands by their name.
      *
      * @param string $artistName
      *
@@ -37,7 +37,7 @@ interface SourceInterface
     /**
      * Return the specified album.
      *
-     * The album bust include tracks ( unless it is a single, ofcourse ).
+     * The album must include tracks ( unless it is a single, ofcourse ).
      *
      * @param string $artistName
      * @param string $title
