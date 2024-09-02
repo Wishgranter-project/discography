@@ -46,7 +46,7 @@ class ApiMusicBrainz extends ApiBase
      *
      * @return array
      */
-    public function getAllArtistsReleaseGroups(string $artistName): array
+    public function getAllArtistsReleaseGroupsByArtistName(string $artistName): array
     {
         $releaseGroups = [];
         $offset = 0;
@@ -54,6 +54,23 @@ class ApiMusicBrainz extends ApiBase
 
         do {
             $info = $this->searchReleaseGroupsByArtistName($artistName, $offset, $limit);
+            $count = $info->count;
+            $groups = $info->{'release-groups'};
+            $releaseGroups = array_merge($releaseGroups, $groups);
+            $offset += 100;
+        } while (count($releaseGroups) < $count);
+
+        return $releaseGroups;
+    }
+
+    public function getAllArtistsReleaseGroupsByArtistId(string $artistId): array
+    {
+        $releaseGroups = [];
+        $offset = 0;
+        $limit = 100;
+
+        do {
+            $info = $this->searchReleaseGroupsByArtistId($artistId, $offset, $limit);
             $count = $info->count;
             $groups = $info->{'release-groups'};
             $releaseGroups = array_merge($releaseGroups, $groups);
@@ -106,9 +123,54 @@ class ApiMusicBrainz extends ApiBase
         int $offset = 0,
         int $limit = 100
     ): ?\stdClass {
-        $query = 'artistname:"' . $artistName . '" AND (primarytype:"Album" OR primarytype:"Single") AND -secondarytype:"Compilation" AND -secondarytype:"Live"';
+        $query =
+        'artistname:"' . $artistName . '" AND ' .
+        '(primarytype:"Album" OR primarytype:"Single") AND ' .
+        '-secondarytype:"Compilation" AND ' .
+        '-secondarytype:"Live"';
 
         $endpoint = 'release-group?query=' . $query . '&offset=' . $offset . '&limit=' . $limit;
+        return $this->getJson($endpoint);
+    }
+
+    /**
+     * @param string $artistId
+     * @param int $offset
+     * @param int $limit
+     *
+     * @return null|\stdClass
+     */
+    public function searchReleaseGroupsByArtistId(
+        string $artistId,
+        int $offset = 0,
+        int $limit = 100
+    ): ?\stdClass {
+        $query =
+        'arid:"' . $artistId . '" AND ' .
+        '(primarytype:"Album" OR primarytype:"Single") AND ' .
+        '-secondarytype:"Compilation" AND ' .
+        '-secondarytype:"Live"';
+
+        $endpoint = 'release-group?query=' . $query . '&offset=' . $offset . '&limit=' . $limit;
+        return $this->getJson($endpoint);
+    }
+
+    /**
+     * @param string $artistName
+     * @param int $offset
+     * @param int $limit
+     *
+     * @return null|\stdClass
+     */
+    public function searchArtistsByArtistName(
+        string $artistName,
+        int $offset = 0,
+        int $limit = 100
+    ): ?\stdClass {
+        $query =
+        'artist:"' . $artistName . '"';
+
+        $endpoint = 'artist?query=' . $query . '&offset=' . $offset . '&limit=' . $limit;
         return $this->getJson($endpoint);
     }
 

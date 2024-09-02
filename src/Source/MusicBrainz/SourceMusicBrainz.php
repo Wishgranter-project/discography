@@ -45,8 +45,18 @@ class SourceMusicBrainz extends SourceBase implements SourceInterface
      */
     public function getArtistsAlbums(string $artistName): array
     {
+        $artistId = $this->getArtistIdByName($artistName);
+        $releaseGroups = [];
+
+        if ($artistId) {
+            $releaseGroups = $this->api->getAllArtistsReleaseGroupsByArtistId($artistId);
+        }
+
+        if (!$releaseGroups) {
+            $releaseGroups = $this->api->getAllArtistsReleaseGroupsByArtistName($artistName);
+        }
+
         $albums = [];
-        $releaseGroups = $this->api->getAllArtistsReleaseGroups($artistName);
         $titles = [];
 
         foreach ($releaseGroups as $g) {
@@ -74,6 +84,14 @@ class SourceMusicBrainz extends SourceBase implements SourceInterface
         Album::sortAlbums($albums);
 
         return $albums;
+    }
+
+    protected function getArtistIdByName(string $artistName)
+    {
+        $results = $this->api->searchArtistsByArtistName($artistName);
+        return $results->artists
+            ? $results->artists[0]->id
+            : null;
     }
 
     /**
