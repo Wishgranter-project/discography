@@ -17,8 +17,10 @@ interface SourceInterface
      * Search for artists/bands by their name.
      *
      * @param string $artistName
+     *   The name of the artist/band.
      *
      * @return [WishgranterProject\Discography\Artist]
+     *   An array of with matching artists.
      */
     public function searchForArtist(string $artistName): array;
 
@@ -29,8 +31,10 @@ interface SourceInterface
      * Only albuns and singles from the specified artist.
      *
      * @param string $artistName
+     *   The name of the artist/band.
      *
-     * @return Album[]
+     * @return [WishgranterProject\Discography\Album]
+     *   An array with matching albums.
      */
     public function getArtistsAlbums(string $artistName): array;
 
@@ -40,9 +44,12 @@ interface SourceInterface
      * The album must include tracks ( unless it is a single, ofcourse ).
      *
      * @param string $artistName
+     *   The name of the artist/band.
      * @param string $title
+     *   The title of the album/single.
      *
      * @return null|Album
+     *   The matching album/single.
      */
     public function getAlbum(string $artistName, string $title): ?Album;
 }

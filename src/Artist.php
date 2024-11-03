@@ -93,9 +93,13 @@ class Artist
     }
 
     /**
+     * Creates a new ofject out of an associative array.
+     *
      * @param string[] $array
+     *   Associative array.
      *
      * @return WishgranterProject\Discography\Artist
+     *   The resulting object.
      */
     public static function createFromArray(array $array): Artist
     {

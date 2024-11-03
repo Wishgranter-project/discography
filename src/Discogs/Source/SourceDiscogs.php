@@ -1,8 +1,8 @@
 <?php
 
-namespace WishgranterProject\Discography\Source\Discogs;
+namespace WishgranterProject\Discography\Discogs\Source;
 
-use WishgranterProject\Discography\Api\ApiDiscogs;
+use WishgranterProject\Discography\Discogs\ApiDiscogs;
 use WishgranterProject\Discography\Source\SourceInterface;
 use WishgranterProject\Discography\Source\SourceBase;
 use WishgranterProject\Discography\Artist;
@@ -10,17 +10,29 @@ use WishgranterProject\Discography\Album;
 
 class SourceDiscogs extends SourceBase implements SourceInterface
 {
+    /**
+     * @var WishgranterProject\Discography\Discogs\ApiDiscogs
+     *   The discogs api.
+     */
     protected ApiDiscogs $api;
 
+    /**
+     * @var string
+     *   This source's id.
+     */
     protected string $id = 'discogs';
 
+    /**
+     * @param WishgranterProject\Discography\Discogs\ApiDiscogs $api
+     *   The discogs api.
+     */
     public function __construct(ApiDiscogs $api)
     {
         $this->api = $api;
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function searchForArtist(string $artistName): array
     {
@@ -40,7 +52,7 @@ class SourceDiscogs extends SourceBase implements SourceInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getArtistsAlbums(string $artistName): array
     {
@@ -54,11 +66,11 @@ class SourceDiscogs extends SourceBase implements SourceInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getAlbum(string $artistName, string $title): ?Album
     {
-        $releases = $this->api->searchReleasesByTitleAndArtistsName($artistName, $title, $page = 1, $itensPerPage = 5);
+        $releases = $this->api->searchReleasesByTitleAndArtistsName($artistName, $title, $page = 1, $itemsPerPage = 5);
         if (!$releases->results) {
             return null;
         }
@@ -85,7 +97,7 @@ class SourceDiscogs extends SourceBase implements SourceInterface
             'id'        => $r->id,
             'title'     => $r->title,
             'artist'    => $artistName,
-            'year'      => isset($r->year) ? $r->year : null,
+            'year'      => $r->year ?? null,
             'thumbnail' => isset($r->images) ? $r->images[0]->uri : null,
             'single'    => in_array('Single', $formats),
             'tracks'    => $tracks,
@@ -93,11 +105,13 @@ class SourceDiscogs extends SourceBase implements SourceInterface
     }
 
     /**
-     * Gets the id of the artist that more closely matches $artistName
+     * Retrieves the id of the artist/band that more closely matches $artistName.
      *
      * @param string $artistName
+     *   The name of the artist/band.
      *
-     * @return string|null The id
+     * @return string|null
+     *   The id.
      */
     protected function getArtistIdByName(string $artistName): ?string
     {
@@ -112,6 +126,7 @@ class SourceDiscogs extends SourceBase implements SourceInterface
             }
         }
 
+        // Settles for the first result.
         return $results[0]->id;
     }
 
@@ -132,12 +147,15 @@ class SourceDiscogs extends SourceBase implements SourceInterface
     }
 
     /**
-     * Compares what was typed to the search results.
+     * Compares the name of the search term with the search results.
      *
      * @param string $artistName
+     *   Name from the search results.
      * @param string $toCompare
+     *   Name we are searching for.
      *
      * @return bool
+     *   If it matches or not.
      */
     protected function sameName(string $artistName, string $toCompare): bool
     {
@@ -148,14 +166,18 @@ class SourceDiscogs extends SourceBase implements SourceInterface
         $artistNameNormalized = iconv('UTF-8', 'ASCII//TRANSLIT', $artistName);
         if ($artistNameNormalized == $artistName) {
             return false;
-        } elseif ($artistNameNormalized == $toCompare) {
+        }
+
+        if ($artistNameNormalized == $toCompare) {
             return true;
         }
 
         $toCompareNormalized  = iconv('UTF-8', 'ASCII//TRANSLIT', $toCompare);
         if ($toCompareNormalized == $toCompare) {
             return false;
-        } elseif ($artistName == $toCompareNormalized) {
+        }
+
+        if ($artistName == $toCompareNormalized) {
             return true;
         }
 

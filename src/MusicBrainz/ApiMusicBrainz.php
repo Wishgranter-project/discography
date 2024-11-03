@@ -1,6 +1,6 @@
 <?php
 
-namespace WishgranterProject\Discography\Api;
+namespace WishgranterProject\Discography\MusicBrainz;
 
 use AdinanCenci\GenericRestApi\ApiBase;
 use Psr\SimpleCache\CacheInterface;
@@ -12,21 +12,26 @@ use Psr\Http\Client\ClientInterface;
 class ApiMusicBrainz extends ApiBase
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected string $baseUrl = 'https://musicbrainz.org/ws/2/';
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected array $options = [
         'timeToLive' => 24 * 60 * 60 * 30, // For how long should GET requests be cached.
     ];
 
     /**
+     * Search for artist/band by name.
+     *
      * @param string $artistName
+     *   The name of the artist/band.
      * @param int $offset
+     *   Results offset.
      * @param int $limit
+     *   Max numbero flimits it should return.
      *
      * @return null|\stdClass
      */
@@ -37,14 +42,24 @@ class ApiMusicBrainz extends ApiBase
     ): ?\stdClass {
         $query = 'name:"' . $artistName . '"';
 
-        $endpoint = 'artist?query=' . $query . '&offset=' . $offset . '&limit=' . $limit;
+        $queryString = http_build_query([
+            'query'  => $query,
+            'offset' => $offset,
+            'limit'  => $limit
+        ]);
+
+        $endpoint = 'artist?' . $queryString;
         return $this->getJson($endpoint);
     }
 
     /**
-     * @param string $artistName
+     * Search release groups by the name of the artist/band.
      *
-     * @return array
+     * @param string $artistName
+     *   The name of the artist/band.
+     *
+     * @return \stdClass[]
+     *   Release groups.
      */
     public function getAllArtistsReleaseGroupsByArtistName(string $artistName): array
     {
@@ -63,6 +78,15 @@ class ApiMusicBrainz extends ApiBase
         return $releaseGroups;
     }
 
+    /**
+     * Search release groups by the id of the artist/band.
+     *
+     * @param string $artistId
+     *   The id of the artist/band.
+     *
+     * @return \stdClass[]
+     *   Release groups.
+     */
     public function getAllArtistsReleaseGroupsByArtistId(string $artistId): array
     {
         $releaseGroups = [];
@@ -81,10 +105,16 @@ class ApiMusicBrainz extends ApiBase
     }
 
      /**
+     * Seaarch for releases by the name of the artist/band.
+     *
      * @param string $artistName
+     *   The name of the artist/band.
      * @param string $title
+     *   The title of the release.
      * @param int $offset
+     *   Results offset.
      * @param int $limit
+     *   Max numbero flimits it should return.
      *
      * @return null|\stdClass
      */
@@ -96,14 +126,24 @@ class ApiMusicBrainz extends ApiBase
     ): ?\stdClass {
         $query = 'artistname:"' . $artistName . '" AND release:"' . $title . '"';
 
-        $endpoint = 'release?query=' . $query . '&offset=' . $offset . '&limit=' . $limit;
+        $queryString = http_build_query([
+            'query'  => $query,
+            'offset' => $offset,
+            'limit'  => $limit
+        ]);
+
+        $endpoint = 'release?' . $queryString;
         return $this->getJson($endpoint);
     }
 
     /**
+     * Get info on a release by its id.
+     *
      * @param string $id
+     *   The release id.
      *
      * @return null|\stdClass
+     *   Release information
      */
     public function getReleaseById(string $id): ?\stdClass
     {
@@ -112,11 +152,17 @@ class ApiMusicBrainz extends ApiBase
     }
 
     /**
+     * Search release groups by the name of the artist/band.
+     *
      * @param string $artistName
+     *   The name of the artist/band.
      * @param int $offset
+     *   Results offset.
      * @param int $limit
+     *   Max numbero flimits it should return.
      *
      * @return null|\stdClass
+     *   Release groups.
      */
     public function searchReleaseGroupsByArtistName(
         string $artistName,
@@ -126,19 +172,31 @@ class ApiMusicBrainz extends ApiBase
         $query =
         'artistname:"' . $artistName . '" AND ' .
         '(primarytype:"Album" OR primarytype:"Single") AND ' .
-        '-secondarytype:"Compilation" AND ' .
-        '-secondarytype:"Live"';
+        '-secondarytype:"Compilation" AND ' . // No thank you
+        '-secondarytype:"Live"'; // Absolutely not.
 
-        $endpoint = 'release-group?query=' . $query . '&offset=' . $offset . '&limit=' . $limit;
+        $queryString = http_build_query([
+            'query'  => $query,
+            'offset' => $offset,
+            'limit'  => $limit
+        ]);
+
+        $endpoint = 'release-group?' . $queryString;
         return $this->getJson($endpoint);
     }
 
     /**
+     * Search release groups by the id of the artist/band.
+     *
      * @param string $artistId
+     *   The id of the artist/band.
      * @param int $offset
+     *   Results offset.
      * @param int $limit
+     *   Max numbero flimits it should return.
      *
      * @return null|\stdClass
+     *   Release groups.
      */
     public function searchReleaseGroupsByArtistId(
         string $artistId,
@@ -151,16 +209,28 @@ class ApiMusicBrainz extends ApiBase
         '-secondarytype:"Compilation" AND ' .
         '-secondarytype:"Live"';
 
-        $endpoint = 'release-group?query=' . $query . '&offset=' . $offset . '&limit=' . $limit;
+        $queryString = http_build_query([
+            'query'  => $query,
+            'offset' => $offset,
+            'limit'  => $limit
+        ]);
+
+        $endpoint = 'release-group?' . $queryString;
         return $this->getJson($endpoint);
     }
 
     /**
+     * Search for an artist/band by their name.
+     *
      * @param string $artistName
+     *   The name of the artist/band.
      * @param int $offset
+     *   Results offset.
      * @param int $limit
+     *   Max numbero flimits it should return.
      *
      * @return null|\stdClass
+     *   Artists.
      */
     public function searchArtistsByArtistName(
         string $artistName,
@@ -170,12 +240,18 @@ class ApiMusicBrainz extends ApiBase
         $query =
         'artist:"' . $artistName . '"';
 
-        $endpoint = 'artist?query=' . $query . '&offset=' . $offset . '&limit=' . $limit;
+        $queryString = http_build_query([
+            'query'  => $query,
+            'offset' => $offset,
+            'limit'  => $limit
+        ]);
+
+        $endpoint = 'artist?' . $queryString;
         return $this->getJson($endpoint);
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function createRequest(string $endPoint): RequestInterface
     {
@@ -187,7 +263,7 @@ class ApiMusicBrainz extends ApiBase
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function generateExceptionMessage(ResponseInterface $response): string
     {

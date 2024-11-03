@@ -1,9 +1,9 @@
 <?php
 
-use WishgranterProject\Discography\Api\ApiDiscogs;
-use WishgranterProject\Discography\Api\ApiMusicBrainz;
-use WishgranterProject\Discography\Source\Discogs\SourceDiscogs;
-use WishgranterProject\Discography\Source\MusicBrainz\SourceMusicBrainz;
+use WishgranterProject\Discography\Discogs\ApiDiscogs;
+use WishgranterProject\Discography\Discogs\Source\SourceDiscogs;
+use WishgranterProject\Discography\MusicBrainz\ApiMusicBrainz;
+use WishgranterProject\Discography\MusicBrainz\Source\SourceMusicBrainz;
 use WishgranterProject\Discography\Artist;
 use WishgranterProject\Discography\Release;
 use AdinanCenci\FileCache\Cache;

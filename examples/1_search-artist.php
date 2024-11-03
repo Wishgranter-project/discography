@@ -8,25 +8,28 @@ include 'includes/_include.php';
 
 $sourceId     = getSourceId();
 $source       = getSource($sourceId);
-$artistName   = get('artistName', 'The Andrew Sisters');
+$artistName   = get('artistName', '');
+$results      = [];
 
 //---------------------------------------
 
-try {
-    $results  = $source->searchForArtist($artistName);
-} catch (UserError $e) {
-    echo $e->getMessage();
-    die();
+if ($artistName) {
+    try {
+        $results = $source->searchForArtist($artistName);
+    } catch (UserError $e) {
+        echo $e->getMessage();
+        die();
+    }
 }
 
 require 'includes/_header.php';
 ?>
 
 <h1>
-    <?php echo "Artists"; ?>
+    <?php echo 'Artists' . ( $artistName ? ', results for "' . $artistName . '"' : ''); ?>
 </h1>
 <h2>
-    <?php echo "from $sourceId | " . switchSourceLinks($_GET['source'] ?? ''); ?>
+    <?php echo "from $sourceId | See results from " . switchSourceLinks(get('source', '')); ?>
 </h2>
 <form>
     <input type="hidden" name="source" value="<?php echo $sourceId;?>" />
@@ -46,4 +49,17 @@ require 'includes/_header.php';
 </div>
 
 <?php
+
+if (!$artistName) {
+    echo
+    '<p>Search for the name of an artist/band, for example:</p>
+    <ul>
+        <li><a href="?artistName=Metallica&source=' . $sourceId . '">Metallica</a></li>
+        <li><a href="?artistName=Amy Winehouse&source=' . $sourceId . '">Amy Winehouse</a></li>
+        <li><a href="?artistName=Cain Offering&source=' . $sourceId . '">Cain Offering</a></li>
+        <li><a href="?artistName=Yeasayer&source=' . $sourceId . '">Yeasayer</a></li>
+    </ul>';
+}
+
+
 require 'includes/_footer.php';

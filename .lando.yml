@@ -9,7 +9,6 @@ config:
     server: ./.lando/
     php: ./.lando/php/php.ini
 services:
-  database: disabled
 
   # Unset the XDEBUG_MODE environment variable, this way the xdebug.mode
   # setting in .lando/php/php.ini will not be ignored.

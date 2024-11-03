@@ -150,9 +150,13 @@ class Album
     }
 
     /**
+     * Creates a new ofject out of an associative array.
+     *
      * @param string[] $array
+     *   Associative array.
      *
      * @return WishgranterProject\Discography\Album
+     *   The resulting object.
      */
     public static function createFromArray(array $array): Album
     {
@@ -168,6 +172,14 @@ class Album
         );
     }
 
+    /**
+     * Custom method to order albums.
+     *
+     * Puts single at the end and orders everything alphabetically.
+     *
+     * @param WishgranterProject\Discography\Album[] $albums
+     *   Array of albums.
+     */
     public static function sortAlbums(array &$albums): void
     {
         usort($albums, function ($a, $b) {

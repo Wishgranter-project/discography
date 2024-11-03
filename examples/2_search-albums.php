@@ -7,7 +7,7 @@ include 'includes/_include.php';
 $sourceId     = getSourceId();
 $source       = getSource($sourceId);
 $artistName   = get('artistName', 'Andrew Sisters');
-$itensPerPage = 20;
+$itemsPerPage = 20;
 
 //---------------------------------------
 
@@ -16,10 +16,10 @@ require 'includes/_header.php';
 ?>
 
 <h1>
-    <?php echo "Albums of $artistName"; ?>
+    <?php echo 'Albums, results for "' . $artistName . '"'; ?>
 </h1>
 <h2>
-    <?php echo "from $sourceId | " . switchSourceLinks($_GET['source'] ?? ''); ?>
+    <?php echo "from $sourceId | See results from " . switchSourceLinks($sourceId); ?>
 </h2>
 <form>
     <input type="hidden" name="source" value="<?php echo $sourceId;?>" />
@@ -45,6 +45,10 @@ require 'includes/_header.php';
     }
     ?>
 </div>
+
+
 <?php
+echo
+"<a href=\"1_search-artist.php?artistName=$artistName&source=$sourceId\"><< back</a>";
 
 require 'includes/_footer.php';

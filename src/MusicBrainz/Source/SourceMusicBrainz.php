@@ -1,8 +1,8 @@
 <?php
 
-namespace WishgranterProject\Discography\Source\MusicBrainz;
+namespace WishgranterProject\Discography\MusicBrainz\Source;
 
-use WishgranterProject\Discography\Api\ApiMusicBrainz;
+use WishgranterProject\Discography\MusicBrainz\ApiMusicBrainz;
 use WishgranterProject\Discography\Source\SourceInterface;
 use WishgranterProject\Discography\Source\SourceBase;
 use WishgranterProject\Discography\Artist;
@@ -10,17 +10,29 @@ use WishgranterProject\Discography\Album;
 
 class SourceMusicBrainz extends SourceBase implements SourceInterface
 {
+    /**
+     * @var WishgranterProject\Discography\MusicBrainz\ApiMusicBrainz
+     *   Music Brainz api.
+     */
     protected ApiMusicBrainz $api;
 
+    /**
+     * @var string
+     *   This source's id.
+     */
     protected string $id = 'music_brainz';
 
+    /**
+     * @param WishgranterProject\Discography\MusicBrainz\ApiMusicBrainz $api
+     *   Music Brainz api.
+     */
     public function __construct(ApiMusicBrainz $api)
     {
         $this->api = $api;
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function searchForArtist(string $artistName): array
     {
@@ -41,7 +53,7 @@ class SourceMusicBrainz extends SourceBase implements SourceInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getArtistsAlbums(string $artistName): array
     {
@@ -95,7 +107,7 @@ class SourceMusicBrainz extends SourceBase implements SourceInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getAlbum(string $artistName, string $title): ?Album
     {
@@ -118,7 +130,9 @@ class SourceMusicBrainz extends SourceBase implements SourceInterface
             'source'    => $this->getId(),
             'id'        => $firstResult->id, // release id, not the release group
             'title'     => $firstResult->title ?? '',
-            'year'      => isset($firstResult->date) ? $this->getYear($firstResult->date) : 0,
+            'year'      => isset($firstResult->date)
+                ? $this->getYear($firstResult->date)
+                : 0,
             'artist'    => $artistName,
          // 'thumbnail' => isset($data->images[0]) ? $data->images[0]->uri : null,
             'tracks'    => $tracks
