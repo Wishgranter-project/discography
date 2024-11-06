@@ -72,7 +72,8 @@ class SourceMusicBrainz extends SourceBase implements SourceInterface
         $titles = [];
 
         foreach ($releaseGroups as $g) {
-            if (in_array($g->title, $titles)) {
+            $sortTitle = $g->title . ( $g->{'primary-type'} == 'Single' ? ' ( Single )' : ' ( Album )' );
+            if (in_array($sortTitle, $titles)) {
                 continue;
             }
 
@@ -90,7 +91,7 @@ class SourceMusicBrainz extends SourceBase implements SourceInterface
                 'single'    => $g->{'primary-type'} == 'Single'
             ]);
 
-            $titles[] = $g->title;
+            $titles[] = $sortTitle;
         }
 
         Album::sortAlbums($albums);

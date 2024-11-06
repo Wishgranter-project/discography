@@ -172,8 +172,16 @@ class ApiMusicBrainz extends ApiBase
         $query =
         'artistname:"' . $artistName . '" AND ' .
         '(primarytype:"Album" OR primarytype:"Single") AND ' .
-        '-secondarytype:"Compilation" AND ' . // No thank you
-        '-secondarytype:"Live"'; // Absolutely not.
+        '-secondarytype:"Compilation" AND ' .
+        '-secondarytype:"Live" AND ' .
+        '-secondarytype:"Spokenword" AND ' .
+        '-secondarytype:"Interview" AND ' .
+        '-secondarytype:"Audiobook" AND ' .
+        '-secondarytype:"Audio drama" AND ' .
+        '-secondarytype:"Remix" AND ' .
+        '-secondarytype:"DJ-mix" AND ' .
+        '-secondarytype:"Mixtape/Street" AND ' .
+        '-secondarytype:"Field recording"';
 
         $queryString = http_build_query([
             'query'  => $query,
@@ -207,7 +215,15 @@ class ApiMusicBrainz extends ApiBase
         'arid:"' . $artistId . '" AND ' .
         '(primarytype:"Album" OR primarytype:"Single") AND ' .
         '-secondarytype:"Compilation" AND ' .
-        '-secondarytype:"Live"';
+        '-secondarytype:"Live" AND ' .
+        '-secondarytype:"Spokenword" AND ' .
+        '-secondarytype:"Interview" AND ' .
+        '-secondarytype:"Audiobook" AND ' .
+        '-secondarytype:"Audio drama" AND ' .
+        '-secondarytype:"Remix" AND ' .
+        '-secondarytype:"DJ-mix" AND ' .
+        '-secondarytype:"Mixtape/Street" AND ' .
+        '-secondarytype:"Field recording"';
 
         $queryString = http_build_query([
             'query'  => $query,
