@@ -11,20 +11,23 @@ use WishgranterProject\Discography\Album;
 class SourceMusicBrainz extends SourceBase implements SourceInterface
 {
     /**
+     * Music Brainz api.
+     *
      * @var WishgranterProject\Discography\MusicBrainz\ApiMusicBrainz
-     *   Music Brainz api.
      */
     protected ApiMusicBrainz $api;
 
     /**
+     * This source's id.
+     *
      * @var string
-     *   This source's id.
      */
     protected string $id = 'music_brainz';
 
     /**
+     * Music Brainz api.
+     *
      * @param WishgranterProject\Discography\MusicBrainz\ApiMusicBrainz $api
-     *   Music Brainz api.
      */
     public function __construct(ApiMusicBrainz $api)
     {
@@ -99,7 +102,16 @@ class SourceMusicBrainz extends SourceBase implements SourceInterface
         return $albums;
     }
 
-    protected function getArtistIdByName(string $artistName)
+    /**
+     * Given an artist's name, retrieves its music brainz id.
+     *
+     * @param string $artistName
+     *   The name of the artist.
+     *
+     * @return string|null
+     *   The id, null if it can't be found.
+     */
+    protected function getArtistIdByName(string $artistName): ?string
     {
         $results = $this->api->searchArtistsByArtistName($artistName);
         return $results->artists
@@ -140,6 +152,15 @@ class SourceMusicBrainz extends SourceBase implements SourceInterface
         ]);
     }
 
+    /**
+     * Returns the year given a string date.
+     *
+     * @param string $data
+     *   A string representing a date.
+     *
+     * @return int
+     *   The year of the date.
+     */
     protected function getYear(string $date): int
     {
         $unixTimeStamp = strtotime($date);

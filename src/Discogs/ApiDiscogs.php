@@ -29,6 +29,8 @@ class ApiDiscogs extends ApiBase
     ];
 
     /**
+     * Constructor.
+     *
      * @param string $token
      *   Api token.
      * @param array $options

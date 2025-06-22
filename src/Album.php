@@ -5,55 +5,65 @@ namespace WishgranterProject\Discography;
 class Album
 {
     /**
+     * The source that originated this object.
+     * See WishgranterProject\Discography\Source\SourceInterface::getId.
+     *
      * @var string
-     *   The source that originated this object.
-     *   See WishgranterProject\Discography\Source\SourceInterface::getId.
      */
     protected string $source;
 
     /**
+     * Unique identifier withing the source.
+     *
      * @var string
-     *   Unique identifier withing the source.
      */
     protected string $id;
 
     /**
+     * Title of the album.
+     *
      * @var string
-     *   Title of the album.
      */
     protected string $title;
 
     /**
+     * The artist that released the album.
+     *
      * @var string
-     *   The artist that released the album.
      */
     protected string $artist;
 
     /**
+     * The year it was released.
+     *
      * @var int $year
-     *   The year it was released.
      */
     protected int $year;
 
     /**
+     * An absolute URL to a thumbnail picture.
+     *
      * @var string
-     *   An absolute URL to a thumbnail picture.
      */
     protected string $thumbnail;
 
     /**
+     * The title of the songs in the album.
+     *
      * @var string[]
-     *   The title of the songs in the album.
      */
     protected array $tracks = [];
 
     /**
+     * Traditional album or single.
+     *
      * @var bool
-     *   Traditional album or single.
      */
     protected bool $single = false;
 
     /**
+     * Constructor.
+     *
      * @param string $source
      *   The source that originated this object.
      * @param string $id

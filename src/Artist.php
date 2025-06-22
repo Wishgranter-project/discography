@@ -5,31 +5,37 @@ namespace WishgranterProject\Discography;
 class Artist
 {
     /**
+     * The source that originated this object.
+     * See WishgranterProject\Discography\Source\SourceInterface::getId().
+     *
      * @var string
-     *   The source that originated this object.
-     *   See WishgranterProject\Discography\Source\SourceInterface::getId().
      */
     protected string $source;
 
     /**
+     * Unique identifier withing the source.
+     *
      * @var string
-     *   Unique identifier withing the source.
      */
     protected string $id;
 
     /**
+     * The name of the artist or band.
+     *
      * @var string
-     *   The name of the artist or band.
      */
     protected string $name;
 
     /**
+     * An URL to a thumbnail picture.
+     *
      * @var string
-     *   An URL to a thumbnail picture.
      */
     protected string $thumbnail;
 
     /**
+     * Constructor.
+     *
      * @param string $source
      *   The source that originated this object.
      *   See WishgranterProject\Discography\Source\SourceInterface::getId().

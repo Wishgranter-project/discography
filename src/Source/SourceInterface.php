@@ -9,7 +9,10 @@ use WishgranterProject\Discography\Helper\SearchResults;
 interface SourceInterface
 {
     /**
-     * A unique string identifying this source.
+     * Returns a unique string identifying this source.
+     *
+     * @return string
+     *   The source id.
      */
     public function getId(): string;
 
@@ -19,7 +22,7 @@ interface SourceInterface
      * @param string $artistName
      *   The name of the artist/band.
      *
-     * @return [WishgranterProject\Discography\Artist]
+     * @return WishgranterProject\Discography\Artist[]]
      *   An array of with matching artists.
      */
     public function searchForArtist(string $artistName): array;
@@ -33,7 +36,7 @@ interface SourceInterface
      * @param string $artistName
      *   The name of the artist/band.
      *
-     * @return [WishgranterProject\Discography\Album]
+     * @return WishgranterProject\Discography\Album[]
      *   An array with matching albums.
      */
     public function getArtistsAlbums(string $artistName): array;

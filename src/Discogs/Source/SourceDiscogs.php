@@ -11,18 +11,22 @@ use WishgranterProject\Discography\Album;
 class SourceDiscogs extends SourceBase implements SourceInterface
 {
     /**
+     * The discogs api.
+     *
      * @var WishgranterProject\Discography\Discogs\ApiDiscogs
-     *   The discogs api.
      */
     protected ApiDiscogs $api;
 
     /**
+     * This source's id.
+     *
      * @var string
-     *   This source's id.
      */
     protected string $id = 'discogs';
 
     /**
+     * Constructor.
+     *
      * @param WishgranterProject\Discography\Discogs\ApiDiscogs $api
      *   The discogs api.
      */
@@ -120,9 +124,9 @@ class SourceDiscogs extends SourceBase implements SourceInterface
             return null;
         }
 
-        foreach ($results as $artist) {
-            if ($this->sameName($artist->name, $artistName)) {
-                return $artist->id;
+        foreach ($results as $result) {
+            if ($this->sameName($result->name, $artistName)) {
+                return $result->id;
             }
         }
 
@@ -147,7 +151,7 @@ class SourceDiscogs extends SourceBase implements SourceInterface
     }
 
     /**
-     * Compares the name of the search term with the search results.
+     * Compares two strings to check if they match.
      *
      * @param string $artistName
      *   Name from the search results.

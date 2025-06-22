@@ -9,51 +9,62 @@ use WishgranterProject\Discography\Artist;
 use WishgranterProject\Discography\Album;
 
 /**
- * Returns albuns by artist id.
+ * Retrieves albuns by artist id.
  */
 class ArtistAlbumsGet
 {
     /**
+     * The main class.
+     * We will only use it to instantiate album objects.
+     *
      * @var WishgranterProject\Discography\Discogs\Source\SourceDiscogs
-     *   The main class.
-     *   We will only use it to instantiate album objects.
      */
     protected SourceDiscogs $source;
 
     /**
+     * The discogs api.
+     *
      * @var WishgranterProject\Discography\Discogs\ApiDiscogs
-     *   The discogs api.
      */
     protected ApiDiscogs $api;
 
     /**
+     * The id of the artist within Discogs.
+     *
      * @var string
-     *   The id of the artist within Discogs.
      */
     protected string $artistId;
 
     /**
+     * The name of the artist/band.
+     *
+     * We will only use it to instantiate album objects.
+     *
      * @var string
-     *   The name of the artist/band.]
-     *   We will only use it to instantiate album objects.
      */
     protected string $artistName;
 
     /**
+     * Array of titles from processed releases.
+     *
+     * We keep track to avoid duplicated results.
+     *
      * @var string[]
-     *   Array of titles from processed releases.
-     *   We keep track to avoid duplicated results.
      */
     protected array $titles = [];
 
     /**
+     * Array of master ids from processed releases.
+     *
+     * We keep track to avoid duplicated results.
+     *
      * @var string[]
-     *   Array of master ids from processed releases.
-     *   We keep track to avoid duplicated results.
      */
     protected array $masterIds = [];
 
     /**
+     * Constructor.
+     *
      * @param WishgranterProject\Discography\Discogs\Source\SourceDiscogs $source
      *   The main class.
      *   We will only use it to instantiate album objects.
@@ -75,12 +86,15 @@ class ArtistAlbumsGet
 
     /**
      * Retrieve albums.
+     *
+     * @return WishgranterProject\Discography\Album[]
+     *   Array of albums.
      */
     public function getAlbums(): array
     {
-        $albums             = [];
-        $page               = 1;
-        $pageLimit          = 2;
+        $albums    = [];
+        $page      = 1;
+        $pageLimit = 2;
 
         do {
             $info = $this->getPage($page);
