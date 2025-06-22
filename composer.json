@@ -19,15 +19,15 @@
             "email": "adinancenci@protonmail.com"
         }
     ],
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "autoload": {
         "psr-4": {
             "WishgranterProject\\Discography\\": "src/"
         }
     },
     "require": {
-        "adinan-cenci/psr-18": "dev-master",
-        "adinan-cenci/file-cache": "dev-master",
-        "adinan-cenci/generic-rest-api": "dev-master"
+        "adinan-cenci/psr-18": "^1.0",
+        "adinan-cenci/file-cache": "^2.0",
+        "adinan-cenci/generic-rest-api": "^1.0"
     }
 }
