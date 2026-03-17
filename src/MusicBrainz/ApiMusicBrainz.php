@@ -269,9 +269,9 @@ class ApiMusicBrainz extends ApiBase
     /**
      * {@inheritdoc}
      */
-    protected function createRequest(string $endPoint): RequestInterface
+    protected function createRequest(string $endPoint, array $options = []): RequestInterface
     {
-        $request = parent::createRequest($endPoint);
+        $request = parent::createRequest($endPoint, $options);
         $request = $request->withHeader('User-Agent', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36');
         $request = $request->withHeader('Accept', 'application/json');
 
