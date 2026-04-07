@@ -1,10 +1,6 @@
 <?php
 
-namespace WishgranterProject\Discography\Source;
-
-use WishgranterProject\Discography\Artist;
-use WishgranterProject\Discography\Album;
-use WishgranterProject\Discography\Helper\SearchResults;
+namespace WishgranterProject\Discography;
 
 interface SourceInterface
 {
@@ -22,7 +18,7 @@ interface SourceInterface
      * @param string $artistName
      *   The name of the artist/band.
      *
-     * @return WishgranterProject\Discography\Artist[]]
+     * @return WishgranterProject\Discography\ArtistInterface[]
      *   An array of with matching artists.
      */
     public function searchForArtist(string $artistName): array;
@@ -36,7 +32,7 @@ interface SourceInterface
      * @param string $artistName
      *   The name of the artist/band.
      *
-     * @return WishgranterProject\Discography\Album[]
+     * @return WishgranterProject\Discography\AlbumInterface[]
      *   An array with matching albums.
      */
     public function getArtistsAlbums(string $artistName): array;
@@ -51,8 +47,8 @@ interface SourceInterface
      * @param string $title
      *   The title of the album/single.
      *
-     * @return null|Album
+     * @return null|WishgranterProject\Discography\AlbumInterface
      *   The matching album/single.
      */
-    public function getAlbum(string $artistName, string $title): ?Album;
+    public function getAlbum(string $artistName, string $title): ?AlbumInterface;
 }

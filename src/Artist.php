@@ -2,7 +2,7 @@
 
 namespace WishgranterProject\Discography;
 
-class Artist
+class Artist implements ArtistInterface
 {
     /**
      * The source that originated this object.
@@ -34,6 +34,13 @@ class Artist
     protected string $thumbnail;
 
     /**
+     * @var array
+     *
+     * Metadata about the artist. Implementation specific.
+     */
+    protected array $metadata;
+
+    /**
      * Constructor.
      *
      * @param string $source
@@ -45,17 +52,21 @@ class Artist
      *   The name of the artist or band.
      * @param string $thumbnail
      *   An URL to a thumbnail picture.
+     * @param array $metadata
+     *   Metadata about the artist. Implementation specific.
      */
     public function __construct(
         string $source,
         string $id,
         string $name,
-        string $thumbnail = ''
+        string $thumbnail = '',
+        array $metadata = [],
     ) {
         $this->source    = $source;
         $this->id        = $id;
         $this->name      = $name;
         $this->thumbnail = $thumbnail;
+        $this->metadata  = $metadata;
     }
 
     public function __get($var)
@@ -71,9 +82,7 @@ class Artist
     }
 
     /**
-     * Casts down the Artist object into a relational array.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function toArray(): array
     {
@@ -95,25 +104,24 @@ class Artist
             $array['thumbnail'] = $this->thumbnail;
         }
 
+        if (!empty($this->metadata)) {
+            $array['metadata'] = $this->metadata;
+        }
+
         return $array;
     }
 
     /**
-     * Creates a new ofject out of an associative array.
-     *
-     * @param string[] $array
-     *   Associative array.
-     *
-     * @return WishgranterProject\Discography\Artist
-     *   The resulting object.
+     * {@inheritdoc}
      */
-    public static function createFromArray(array $array): Artist
+    public static function createFromArray(array $array): ArtistInterface
     {
         return new self(
             !empty($array['source'])    ? $array['source']    : '',
             !empty($array['id'])        ? $array['id']        : '',
             !empty($array['name'])      ? $array['name']      : '',
-            !empty($array['thumbnail']) ? $array['thumbnail'] : ''
+            !empty($array['thumbnail']) ? $array['thumbnail'] : '',
+            !empty($array['metadata'])  ? $array['metadata']     : [],
         );
     }
 }

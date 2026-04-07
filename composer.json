@@ -1,18 +1,8 @@
 {
     "name": "wishgranter-project/discography",
-    "description": "Discography",
+    "description": "An API to retrieve discography information.",
     "type": "library",
     "license": "MIT",
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/adinan-cenci/psr-18"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/adinan-cenci/generic-rest-api"
-        }
-    ],
     "authors": [
         {
             "name": "Adinan Cenci",
@@ -24,10 +14,5 @@
         "psr-4": {
             "WishgranterProject\\Discography\\": "src/"
         }
-    },
-    "require": {
-        "adinan-cenci/psr-18": "^1.0",
-        "adinan-cenci/file-cache": "^2.0",
-        "adinan-cenci/generic-rest-api": "^2.0"
     }
 }

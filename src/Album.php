@@ -2,11 +2,11 @@
 
 namespace WishgranterProject\Discography;
 
-class Album
+class Album implements AlbumInterface
 {
     /**
      * The source that originated this object.
-     * See WishgranterProject\Discography\Source\SourceInterface::getId.
+     * See WishgranterProject\Discography\Source\SourceInterface::getId().
      *
      * @var string
      */
@@ -62,6 +62,13 @@ class Album
     protected bool $single = false;
 
     /**
+     * Metadata about the album. Implementation specific.
+     *
+     * @var array
+     */
+    protected array $metadata;
+
+    /**
      * Constructor.
      *
      * @param string $source
@@ -80,6 +87,8 @@ class Album
      *   The title of the songs in the album.
      * @var bool $single
      *   Traditional album or single.
+     * @param array $metadata
+     *   Metadata about the album. Implementation specific.
      */
     public function __construct(
         string $source,
@@ -89,7 +98,8 @@ class Album
         int $year = 0,
         string $thumbnail = '',
         array $tracks = [],
-        bool $single = false
+        bool $single = false,
+        array $metadata = [],
     ) {
         $this->source    = $source;
         $this->id        = $id;
@@ -99,14 +109,11 @@ class Album
         $this->thumbnail = $thumbnail;
         $this->tracks    = $tracks;
         $this->single    = $single;
+        $this->metadata  = $metadata;
     }
 
     public function __get($var)
     {
-        if ($var == 'tracks') {
-            return $this->tracks;
-        }
-
         return !empty($this->{$var})
             ? $this->{$var}
             : null;
@@ -118,9 +125,7 @@ class Album
     }
 
     /**
-     * Casts down the Album object into a relational array.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function toArray(): array
     {
@@ -156,19 +161,17 @@ class Album
 
         $array['single'] = $this->single;
 
+        if (!empty($this->metadata)) {
+            $array['metadata'] = $this->metadata;
+        }
+
         return $array;
     }
 
     /**
-     * Creates a new ofject out of an associative array.
-     *
-     * @param string[] $array
-     *   Associative array.
-     *
-     * @return WishgranterProject\Discography\Album
-     *   The resulting object.
+     * {@inheritdoc}
      */
-    public static function createFromArray(array $array): Album
+    public static function createFromArray(array $array): AlbumInterface
     {
         return new self(
             !empty($array['source'])    ? $array['source']    : '',
@@ -178,7 +181,8 @@ class Album
             !empty($array['year'])      ? $array['year']      : 0,
             !empty($array['thumbnail']) ? $array['thumbnail'] : '',
             !empty($array['tracks'])    ? $array['tracks']    : [],
-            !empty($array['single'])    ? $array['single']    : false
+            !empty($array['single'])    ? $array['single']    : false,
+            !empty($array['metadata'])  ? $array['metadata']  : [],
         );
     }
 
