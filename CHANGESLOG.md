@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 3.0.0 - 2026-04-07
 ### Changed
-- [issue 2](https://github.com/Wishgranter-project/discography/issues/2)? Refactored the library, separating implementations into their own packages.
+- [issue 2](https://github.com/Wishgranter-project/discography/issues/2): Refactored the library, separating implementations into their own packages.
 
 ---
 
